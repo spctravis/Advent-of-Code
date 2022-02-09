@@ -1,0 +1,25 @@
+
+$templist = get-content -path "C:\Users\path\Powershell\AdventOfCode\2021\1.txt"
+$obj = $null
+$obj = @()
+$counter = $null
+$counter = 0
+$list = $null 
+$list = @()
+
+    for ($i = 0; $i -le $templist.Count; $i++ ) { 
+        $sum = $null
+        if ([int]$templist[$i +1] -gt 0) {
+            $sum += [int]$templist[$i] + [int]$templist[$i +1 ] +[int]$templist[$i +2]
+            $list += $sum 
+        }
+        
+    } 
+
+for ($i = 0; $i -le $list.Count; $i++) {
+    if($i -eq 0) { $obj += [string]$list[$i] + " (N/A - no previous measurement)"}
+    elseif ($list[$i] -gt $list[$i - 1]) {$obj += [string]$list[$i] + " (increased)"; $counter ++}
+    elseif ($list[$i] -lt $list[$i - 1]) {$obj += [string]$list[$i] + " (decreased)"}
+    else { $obj += [string]$list[$i] + " (no change)"}
+    
+}
