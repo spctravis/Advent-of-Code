@@ -1,0 +1,29 @@
+$data = get-content -path "C:\Users\path\Powershell\AdventOfCode\2021\1\3.txt"
+$gamarate = $null
+$epsilon = $null
+Get-Variable -Name position* | Remove-Variable
+Get-Variable -Name most* | Remove-Variable
+Get-Variable -Name least* | Remove-Variable
+Get-Variable -Name ones* | Remove-Variable
+Get-Variable -Name zeros* | Remove-Variable
+for ($i = 0; $i -lt $($data[0] | Measure-Object -Character).characters; $i++) {
+    New-Variable -Name ones$i -Value 0
+    New-Variable -Name zeros$i -Value 0
+    New-Variable -Name position$i -Value $( 
+    foreach ($bit in $data) {
+        $var = $bit[$i]
+        if($var -eq "0"){$tempVal = $(Get-Variable -Name zeros$i -ValueOnly);Set-Variable -Name zeros$i -value $($tempVal + 1)}
+        if($var -eq "1"){$tempVal = $(Get-Variable -Name ones$i -ValueOnly);Set-Variable -Name ones$i -value $($tempVal + 1)}
+        $var
+    }    )
+if($(Get-Variable -Name ones$i -ValueOnly) -gt $(Get-Variable -Name zeros$i -ValueOnly)){
+    $gamarate = $gamarate + "1" 
+    $epsilon = $epsilon + "0" 
+}
+if($(Get-Variable -Name ones$i -ValueOnly) -lt $(Get-Variable -Name zeros$i -ValueOnly)){
+    $epsilon = $epsilon + "1" 
+    $gamarate = $gamarate + "0" 
+}
+} #end for
+Write-Host "power comumption is $([convert]::ToInt32($gamarate,2)*[convert]::ToInt32($epsilon,2))"
+
