@@ -1,0 +1,15 @@
+$templist = get-content -path "C:\path\Powershell\AdventOfCode\2021\1\2.txt"
+$horizontal = 0
+$depth = 0
+$aim = 0
+foreach ($direction in $templist) {
+    $direction = $direction.split(" ")
+    $amount = [int]$direction[1]
+    switch ($direction[0]) {
+        forward { $horizontal = $horizontal + $amount ;$depth = $depth + $($aim * $amount) }
+        down { $aim = $aim + $amount}
+        up { $aim = $aim - $amount }
+    }
+  
+}
+Write-Host $horizontal * $depth "eq" $($horizontal*$depth)
