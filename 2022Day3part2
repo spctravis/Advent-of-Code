@@ -1,0 +1,68 @@
+$data = get-content -path "C:\Users\path\Powershell\AdventOfCode\2021\1\3.txt"
+$most = $data
+$least = $data 
+$gamarate = $null
+$epsilon = $null
+#$OxegenGeneratorRating = 1
+#$CO2ScrubberRating = $null
+Get-Variable -Name position* | Remove-Variable
+Get-Variable -Name ones* | Remove-Variable
+Get-Variable -Name zeros* | Remove-Variable
+while ($most.count -ne 1) {
+    for ($i = 0; $i -lt $($most[0] | Measure-Object -Character).characters; $i++) {
+        New-Variable -Name ones$i -Value 0
+        New-Variable -Name zeros$i -Value 0
+        New-Variable -Name position$i -Value $( 
+        foreach ($bit in $most) {
+            $var = $bit[$i]
+            if($var -eq "0"){$tempVal = $(Get-Variable -Name zeros$i -ValueOnly);Set-Variable -Name zeros$i -value $($tempVal + 1)}
+            if($var -eq "1"){$tempVal = $(Get-Variable -Name ones$i -ValueOnly);Set-Variable -Name ones$i -value $($tempVal + 1)}
+            $var
+        }    )
+        if($(Get-Variable -Name ones$i -ValueOnly) -gt $(Get-Variable -Name zeros$i -ValueOnly)){
+            $gamarate = $gamarate + "1" 
+            $epsilon = $epsilon + "0"          
+         }
+         if($(Get-Variable -Name ones$i -ValueOnly) -lt $(Get-Variable -Name zeros$i -ValueOnly)){
+            $epsilon = $epsilon + "1" 
+            $gamarate = $gamarate + "0" 
+        }
+        if($(Get-Variable -Name ones$i -ValueOnly) -eq $(Get-Variable -Name zeros$i -ValueOnly)){
+            $epsilon = $epsilon + "0" 
+            $gamarate = $gamarate + "1" 
+        }
+        $most = $most | ForEach-Object { if ($_.startswith($gamarate)) { $_  }}
+        }   
+} #end while
+Get-Variable -Name position* | Remove-Variable
+Get-Variable -Name ones* | Remove-Variable
+Get-Variable -Name zeros* | Remove-Variable
+$gamarate = $null
+$epsilon = $null
+while ($least.count -ne 1) {
+    for ($i = 0; $i -lt $($least[0] | Measure-Object -Character).characters; $i++) {
+        New-Variable -Name ones$i -Value 0
+        New-Variable -Name zeros$i -Value 0
+        New-Variable -Name position$i -Value $( 
+        foreach ($bit in $least) {
+            $var = $bit[$i]
+            if($var -eq "0"){$tempVal = $(Get-Variable -Name zeros$i -ValueOnly);Set-Variable -Name zeros$i -value $($tempVal + 1)}
+            if($var -eq "1"){$tempVal = $(Get-Variable -Name ones$i -ValueOnly);Set-Variable -Name ones$i -value $($tempVal + 1)}
+            $var
+        }    )
+        if($(Get-Variable -Name ones$i -ValueOnly) -gt $(Get-Variable -Name zeros$i -ValueOnly)){
+            $gamarate = $gamarate + "1" 
+            $epsilon = $epsilon + "0"          
+         }
+        if($(Get-Variable -Name ones$i -ValueOnly) -lt $(Get-Variable -Name zeros$i -ValueOnly)){
+            $epsilon = $epsilon + "1" 
+            $gamarate = $gamarate + "0" 
+        }
+        if($(Get-Variable -Name ones$i -ValueOnly) -eq $(Get-Variable -Name zeros$i -ValueOnly)){
+            $gamarate = $gamarate + "1" 
+            $epsilon = $epsilon + "0"          
+         }
+        $least = $least | ForEach-Object { if ($_.startswith($epsilon)) { $_  }}
+        }   
+} #end while
+Write-Host "life support rateing is $([convert]::ToInt32($most,2)*[convert]::ToInt32($least,2))"
