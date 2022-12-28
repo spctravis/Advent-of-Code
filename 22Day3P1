@@ -1,0 +1,18 @@
+$Alpha=@()
+$PointsUpper=27
+$PointsLower=1
+97..122 |foreach-object{$Alpha+=[PSCustomObject]@{Alpha=[char]$_;Points=$PointsLower}; $PointsLower++}
+65..90|foreach-object{$Alpha+=[PSCustomObject]@{Alpha=[char]$_;Points=$PointsUpper}; $PointsUpper++}
+
+$sum = 0
+foreach($line in Get-Content C:\Users\travis.anderson\Documents\AdventOfCode\Day3P1Test.txt) {
+ $half = $($line | Measure-Object -Character).Characters/2
+ $firstsack = ($line -split "(\w{$half})" | Where-Object {$_.trim() -ne ""})
+  $firstsack = $firstsack[0].ToCharArray()
+ $secondsack = ($line -split "(\w{$half})" | Where-Object {$_.trim() -ne ""})
+  $secondsack = $secondsack[1].ToCharArray()
+ $item = ((Compare-Object -ReferenceObject $firstsack -DifferenceObject $secondsack -IncludeEqual -ExcludeDifferent).InputObject)[0]
+ $item
+ $alpha | foreach {$var = $_; if ($var.alpha -ceq $item) {$sum += $var.Points; $item + " " +$var.Points}}
+ 
+ $sum
