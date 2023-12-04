@@ -10,7 +10,7 @@ $data | foreach {
         $GamelimitRed = $limitRed
         $GamelimitGreen = $limitgreen
         $GamelimitBlue = $limitblue
-        $good = $true
+        
         $game = $_.split(",")
         $game | foreach { 
             $grab = $_.split(" ")
@@ -24,7 +24,9 @@ $data | foreach {
             $good = $false
                 } # end if
             } # end game foreach
-        if($good){$total = $total + $GameID}
+        
         } # end line foreach
+        if($good){$total = $total + $GameID}
+        $good = $true
     } # end data foreach
 $total
