@@ -2,8 +2,12 @@ $data = Get-Content "C:\Users\Anderson\Documents\Travis\Advent of code\2023\Day3
 $linecouter = 0
 $lineend = ($data | Measure-Object).Count
 $symbols = "+", "/","-","*","$","%","#"
-(0..($test.Count-1)) | where {$test[$_] -match 
-$data | foreach {
+$points = @()
+
+for($linecounter = 0; $linecounter -lt $data.Count; $linecounter++)
+    {
+    $line = $data[$linecounter].ToCharArray()
+    $points += [pscustomobject]@{Line=$linecounter; point=(0..($line.Count-1)) | where {$line[$_] -match "\*|`#|`\$|`&|`%|`@|`\+|`-|`\\|`="}}
     
-    $linecounter++
      } # end data foreach
+   
